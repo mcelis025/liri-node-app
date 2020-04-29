@@ -109,7 +109,7 @@ function song(){
                 // Mr. Nobody
 function movie(){
   var userMovie = process.argv.slice(3).join(" ").toUpperCase();
-  var movie = process.argv.slice(3).join("&");
+  var movie = process.argv.slice(3).join("%20");
 
   axios.get("http://www.omdbapi.com/?apikey=trilogy&t="+ movie).then(
     function(response) {
