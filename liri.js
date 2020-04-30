@@ -13,16 +13,17 @@ var fs = require("fs");
 
 var userInput = process.argv;
 var command = userInput[2];
+var userKey = process.argv.slice(3).join(" ").toUpperCase();
 
   switch (command) {
     case "concert-this":
-      concert();
+      concert(userKey);
       break;
     case "spotify-this-song":
-      song();
+      song(userKey);
       break;
     case "movie-this":
-      movies();
+      movies(userKey);
       break;
     case "do-what-it-says":
       readText();
@@ -36,14 +37,14 @@ var command = userInput[2];
 // venue location 
 // date of the event (using moment format "MM/DD/YYYY")
 // example should return  https://rest.bandsintown.com/artists/celine+dion/events?app_id=codingbootcamp
-function concert(artist) {
-  var bandArtist = process.argv.slice(3).join(" ").toUpperCase();
-  artist = process.argv.slice(3).join("+");
+function concert(userKey) {
+  var bandArtist = userKey;
+  artist = userKey.split(" ").join("+");
 
   axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp").then(
     function (response) {
       var bit = response.data;
-      console.log("-----------------Upcoming Concerts: " + bandArtist + "-----------------");
+      console.log("\n-----------------Upcoming Concerts: " + bandArtist + "-----------------");
       for (i = 0; i < response.data.length; i++) {
         var convertedTime = moment(bit[i].datetime).format("MM/DD/YYYY");
         console.log(
@@ -56,11 +57,7 @@ function concert(artist) {
     .catch(function (error) {
       console.log(error);
     });
-/*     fs.appendFile("log.txt", function (err) {
-      if (err) {
-        return console.log(err);
-      }
-  }); */
+    log();
 };
 
 // node liri.js spotify-this-song <song name here>
@@ -73,14 +70,14 @@ function concert(artist) {
 // blank search 
 // return 
 // The Sign by Ace of Base 
-function song(songName) {
-  songName = process.argv.slice(3).join(" ").toUpperCase();
+function song(userKey) {
+  songName = userKey;
   
   if (songName === "") {
     songName = "The Sign";
   };
 
-  console.log("-----------------Song Chosen: " + songName + "-----------------");
+  console.log("\n-----------------Song Chosen: " + songName + "-----------------");
 
   spotify
     .search({ type: 'track', query: songName })
@@ -98,11 +95,7 @@ function song(songName) {
     .catch(function (err) {
       console.log(err);
     });
-/*     fs.appendFile("log.txt", function (err) {
-      if (err) {
-        return console.log(err);
-      }
-  }); */
+    log();
 };
 
 // node liri.js movie-this <movie name here>
@@ -119,9 +112,9 @@ function song(songName) {
 // blank search 
 // return
 // Mr. Nobody
-function movies(movie) {
-  var userMovie = process.argv.slice(3).join(" ").toUpperCase();
-  var movie = process.argv.slice(3).join("%20");
+function movies(userKey) {
+  var userMovie = userKey;
+  var movie = userKey.split(" ").join("%20");
 
   if (movie === "") {
     movie = "Mr. Nobody";
@@ -131,7 +124,7 @@ function movies(movie) {
     function (response) {
       var ombd = response.data;
       console.log(
-        "-----------------Movie Chosen: " + userMovie + "-----------------" +
+        "\n-----------------Movie Chosen: " + userMovie + "-----------------" +
         "\n\nTitle: " + ombd.Title +
         "\nYear: " + ombd.Year +
         "\nIMDB Rating: " + ombd.imdbRating +
@@ -145,11 +138,7 @@ function movies(movie) {
     .catch(function (error) {
       console.log(error);
     });
-/*     fs.appendFile("log.txt", function (err) {
-      if (err) {
-        return console.log(err);
-      }
-  }); */
+    log();
 };
 
 // node liri.js do-what-it-says 
@@ -191,14 +180,17 @@ function readText(){
   };
 
   });
+
 };
 
 // Bonus 
     // Output (create) data to txt file called log.txt
     // make data append to log.txt
+function log(){
+  fs.appendFile("log.txt", function (err) {
+    if (err) {
+        return console.log(err);
+    }
+});
+};
 
-/*      fs.appendFile("log.txt", function (err) {
-      if (err) {
-          return console.log(err);
-      }
-  }); */
