@@ -14,20 +14,20 @@ var fs = require("fs");
 var userInput = process.argv;
 var command = userInput[2];
 
-switch (command) {
-  case "concert-this":
-    concert();
-    break;
-  case "spotify-this-song":
-    song();
-    break;
-  case "movie-this":
-    movie();
-    break;
-  case "do-what-it-says":
-    readFile();
-    break;
-}
+  switch (command) {
+    case "concert-this":
+      concert();
+      break;
+    case "spotify-this-song":
+      song();
+      break;
+    case "movie-this":
+      movies();
+      break;
+    case "do-what-it-says":
+      readText();
+      break;
+};
 
 // node liri.js concert-this <artist/band>
 // search "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
@@ -36,9 +36,9 @@ switch (command) {
 // venue location 
 // date of the event (using moment format "MM/DD/YYYY")
 // example should return  https://rest.bandsintown.com/artists/celine+dion/events?app_id=codingbootcamp
-function concert() {
+function concert(artist) {
   var bandArtist = process.argv.slice(3).join(" ").toUpperCase();
-  var artist = process.argv.slice(3).join("+");
+  artist = process.argv.slice(3).join("+");
 
   axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp").then(
     function (response) {
@@ -56,6 +56,11 @@ function concert() {
     .catch(function (error) {
       console.log(error);
     });
+/*     fs.appendFile("log.txt", function (err) {
+      if (err) {
+        return console.log(err);
+      }
+  }); */
 };
 
 // node liri.js spotify-this-song <song name here>
@@ -68,9 +73,9 @@ function concert() {
 // blank search 
 // return 
 // The Sign by Ace of Base 
-function song() {
-  var songName = process.argv.slice(3).join(" ").toUpperCase();
-
+function song(songName) {
+  songName = process.argv.slice(3).join(" ").toUpperCase();
+  
   if (songName === "") {
     songName = "The Sign";
   };
@@ -93,6 +98,11 @@ function song() {
     .catch(function (err) {
       console.log(err);
     });
+/*     fs.appendFile("log.txt", function (err) {
+      if (err) {
+        return console.log(err);
+      }
+  }); */
 };
 
 // node liri.js movie-this <movie name here>
@@ -109,9 +119,13 @@ function song() {
 // blank search 
 // return
 // Mr. Nobody
-function movie() {
+function movies(movie) {
   var userMovie = process.argv.slice(3).join(" ").toUpperCase();
   var movie = process.argv.slice(3).join("%20");
+
+  if (movie === "") {
+    movie = "Mr. Nobody";
+  };
 
   axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
     function (response) {
@@ -131,30 +145,60 @@ function movie() {
     .catch(function (error) {
       console.log(error);
     });
+/*     fs.appendFile("log.txt", function (err) {
+      if (err) {
+        return console.log(err);
+      }
+  }); */
 };
 
 // node liri.js do-what-it-says 
 // should run info in txt file
 // spotify-this-song
 // i want it that way
-function readFile(){
+function readText(){
   fs.readFile("random.txt", "utf8", function (err, data) {
     if (err) {
       return console.log(err);
   };
-  data = data.split(",");
-  console.log(data);
 
-  command = data[0];
-  console.log(command);
+  var text = data.split(",");
+  //console.log("\n" + data + "\n");
+
+  var command = text[0];
+  var value = text[1].split('"').join("");
+
+  songName = value;
+  //console.log("songName: " + songName);
+  
+  artist = value.split(" ").join("+");
+  //console.log("artist: " + artist);
+
+  movie = value.split(" ").join("%20");
+  //console.log("movie: " + movie);
+
+  // console.log("\nTitle: " + value);
+  // console.log("command: " + command + "\n");
+
+  if (command === "concert-this"){
+    concert(artist);
+  };
+  if (command === "spotify-this-song"){
+    song(songName);
+  };
+  if (command === "movie-this"){
+    movies(movie);
+  };
 
   });
 };
-  
-
-
 
 // Bonus 
     // Output (create) data to txt file called log.txt
     // make data append to log.txt
 
+/*      fs.appendFile("log.txt", function (err) {
+      if (err) {
+          return console.log(err);
+      }
+  }); */
