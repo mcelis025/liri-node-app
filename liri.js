@@ -13,7 +13,7 @@ var fs = require("fs");
 
 var userInput = process.argv;
 var command = userInput[2];
-var userKey = process.argv.slice(3).join(" ").toUpperCase();
+var userKey = userInput.slice(3).join(" ").toUpperCase();
 
   switch (command) {
     case "concert-this":
@@ -45,19 +45,20 @@ function concert(userKey) {
     function (response) {
       var bit = response.data;
       console.log("\n-----------------Upcoming Concerts: " + bandArtist + "-----------------");
-      for (i = 0; i < response.data.length; i++) {
+      for (i = 0; i < 5; i++) {
         var convertedTime = moment(bit[i].datetime).format("MM/DD/YYYY");
-        console.log(
+        var dataReturned = 
           "\nName of Venue: " + bit[i].venue.name +
           "\nVenue Location: " + bit[i].venue.location +
           "\nDate of Event: " + convertedTime +
-          "\n\n-------------------------------------------------------------");
+          "\n\n-------------------------------------------------------------";
+        console.log(dataReturned);
+        log(dataReturned);
       };
     })
     .catch(function (error) {
       console.log(error);
     });
-    log();
 };
 
 // node liri.js spotify-this-song <song name here>
@@ -80,22 +81,23 @@ function song(userKey) {
   console.log("\n-----------------Song Chosen: " + songName + "-----------------");
 
   spotify
-    .search({ type: 'track', query: songName })
+    .search({ type: 'track', query: songName, limit: 5 })
     .then(function (response) {
       var songInfo = response.tracks.items;
       for (var i = 0; i < response.tracks.items.length; i++) {
-        console.log(
+        var dataReturned =
           "\nArtist(s): " + songInfo[i].artists[0].name +
           "\nSong Name: " + songInfo[i].name +
           "\nAlbum Name: " + songInfo[i].album.name +
           "\nPreview Link: " + songInfo[i].preview_url +
-          "\n\n-------------------------------------------------------------");
+          "\n\n-------------------------------------------------------------";
+        console.log(dataReturned);
+        log(dataReturned);
       }
     })
     .catch(function (err) {
       console.log(err);
     });
-    log();
 };
 
 // node liri.js movie-this <movie name here>
@@ -123,7 +125,7 @@ function movies(userKey) {
   axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
     function (response) {
       var ombd = response.data;
-      console.log(
+      var dataReturned = 
         "\n-----------------Movie Chosen: " + userMovie + "-----------------" +
         "\n\nTitle: " + ombd.Title +
         "\nYear: " + ombd.Year +
@@ -133,12 +135,13 @@ function movies(userKey) {
         "\nLanguage: " + ombd.Language +
         "\nPlot: " + ombd.Plot +
         "\nActors: " + ombd.Actors +
-        "\n\n-------------------------------------------------------------");
+        "\n\n-------------------------------------------------------------";
+        console.log(dataReturned);
+        log(dataReturned);
     })
     .catch(function (error) {
       console.log(error);
     });
-    log();
 };
 
 // node liri.js do-what-it-says 
@@ -159,10 +162,10 @@ function readText(){
     artist = value.split(" ").join("+");
     movie = value.split(" ").join("%20");
 
-    //console.log("\n" + data + "\n");
-    //console.log("artist: " + artist);
-    //console.log("movie: " + movie);
-    //console.log("songName: " + songName);
+    // console.log("\n" + data + "\n");
+    // console.log("artist: " + artist);
+    // console.log("movie: " + movie);
+    // console.log("songName: " + songName);
     // console.log("\nTitle: " + value);
     // console.log("command: " + command + "\n");
 
@@ -179,10 +182,10 @@ function readText(){
 };
 
 // Bonus 
-    // Output (create) data to txt file called log.txt
-    // make data append to log.txt
-function log(){
-  fs.appendFile("log.txt", function (err) {
+// Output (create) data to txt file called log.txt
+// make data append to log.txt
+function log(dataReturned){
+  fs.appendFile("log.txt", dataReturned, 'utf8', function (err) {
     if (err) {
       return console.log(err);
     }
