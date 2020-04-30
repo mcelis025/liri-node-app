@@ -149,38 +149,33 @@ function readText(){
   fs.readFile("random.txt", "utf8", function (err, data) {
     if (err) {
       return console.log(err);
-  };
+    };
 
-  var text = data.split(",");
-  //console.log("\n" + data + "\n");
+    var text = data.split(",");
+    var command = text[0];
+    var value = text[1].split('"').join("");
 
-  var command = text[0];
-  var value = text[1].split('"').join("");
+    songName = value;
+    artist = value.split(" ").join("+");
+    movie = value.split(" ").join("%20");
 
-  songName = value;
-  //console.log("songName: " + songName);
-  
-  artist = value.split(" ").join("+");
-  //console.log("artist: " + artist);
+    //console.log("\n" + data + "\n");
+    //console.log("artist: " + artist);
+    //console.log("movie: " + movie);
+    //console.log("songName: " + songName);
+    // console.log("\nTitle: " + value);
+    // console.log("command: " + command + "\n");
 
-  movie = value.split(" ").join("%20");
-  //console.log("movie: " + movie);
-
-  // console.log("\nTitle: " + value);
-  // console.log("command: " + command + "\n");
-
-  if (command === "concert-this"){
-    concert(artist);
-  };
-  if (command === "spotify-this-song"){
-    song(songName);
-  };
-  if (command === "movie-this"){
-    movies(movie);
-  };
-
+    if (command === "concert-this"){
+      concert(artist);
+    };
+    if (command === "spotify-this-song"){
+      song(songName);
+    };
+    if (command === "movie-this"){
+      movies(movie);
+    };
   });
-
 };
 
 // Bonus 
@@ -189,8 +184,8 @@ function readText(){
 function log(){
   fs.appendFile("log.txt", function (err) {
     if (err) {
-        return console.log(err);
+      return console.log(err);
     }
-});
+  });
 };
 
