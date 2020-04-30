@@ -22,6 +22,9 @@ LIRI will search Spotify for songs, Bands in Town for concerts, and OMDB for mov
 # Preview: do-what-it-says
 ![alt text](assets/doWhatItSays.png "do-what-it-says")
 
+# Preview: Video
+  * Preview video is in assets folder named: preview
+
 # Link to GitHub Repository
   * [liri-nod-app](https://github.com/mcelis025/liri-node-app)
 
@@ -48,12 +51,14 @@ LIRI will search Spotify for songs, Bands in Town for concerts, and OMDB for mov
   * npm 
 
 # NPM Used
-  * Node-Spotify-API
   * Axios
-   * OMDB API
-   * Bands In Town API
   * Moment
   * DotEnv
+
+# APIs Used
+  * Node-Spotify-API
+  * Bands In Town API
+  * OMDB API
   
 # Versioning 
   * GitHub
